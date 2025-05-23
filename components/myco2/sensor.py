@@ -64,8 +64,24 @@ async def to_code(config):
     # Register the C++ object as a UART device
     await uart.register_uart_device(var, config)
 
-    # Create the sensor entity based on the schema configuration
-    sens = await sensor.new_sensor(config)
+    # Create a sensor config dictionary specifically for new_sensor
+    sensor_cfg = {}
+    # Populate with keys relevant to sensor.SENSOR_SCHEMA from the main config
+    # This ensures that user-defined values for things like name, unit_of_measurement,
+    # icon, accuracy_decimals, etc., are passed to the sensor.
+    # Default values for these are applied by the sensor.sensor_schema() call
+    # in this component's CONFIG_SCHEMA if not specified by the user.
+    for key in sensor.SENSOR_SCHEMA.schema:
+        if key in config:
+            sensor_cfg[key] = config[key]
+    
+    # Ensure CONF_NAME is included if it was in the original config and not picked up
+    # (though it should be as it's part of SENSOR_SCHEMA). This is a safeguard.
+    if CONF_NAME in config and CONF_NAME not in sensor_cfg:
+        sensor_cfg[CONF_NAME] = config[CONF_NAME]
+
+    # Create the sensor entity using the filtered configuration
+    sens = await sensor.new_sensor(sensor_cfg)
     # Link the sensor entity to the C++ object's sensor pointer
     cg.add(var.set_co2_sensor(sens))
 
