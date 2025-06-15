@@ -22,7 +22,7 @@ Simply add the following configuration to your device's `.yaml` file:
 external_components:
   - source:
       type: git
-      url: "[https://github.com/fuglphoenix/Coz-lp-esphome-sensor](https://github.com/fuglphoenix/Coz-lp-esphome-sensor)"
+      url: "https://github.com/fuglphoenix/Coz-lp-esphome-sensor"
       ref: "main" # You can pin this to a specific version/tag in the future
     # refresh: 2s # Uncomment for local development to force a refresh
 
