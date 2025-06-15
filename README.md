@@ -2,7 +2,6 @@
 
 This is an external component for [ESPHome](https://esphome.io/) that integrates UART-based CO2 sensors. It provides a clean way to read sensor values and expose advanced calibration and configuration functions as services in Home Assistant.
 
-This component was developed to replace a legacy `platform: custom` lambda configuration, providing a more robust, reusable, and user-friendly solution.
 
 ## Features
 
@@ -13,7 +12,7 @@ This component was developed to replace a legacy `platform: custom` lambda confi
 
 ## Installation & Configuration
 
-This component is installed by adding it as an `external_component` pointing to this GitHub repository. The manual process of creating folders and copying files is not required.
+This component is installed by adding it as an `external_component` pointing to this GitHub repository.  
 
 Simply add the following configuration to your device's `.yaml` file:
 
@@ -64,33 +63,3 @@ The service name will always follow the format `esphome.<your_device_name>_<serv
 | `enable_auto_zero`      | Manually enables the automatic background calibration feature on the sensor.    | `initial_interval` (number, required, in decimal days)<br>`regular_interval` (number, required, in decimal days) |
 | `disable_auto_zero`     | Manually disables the automatic background calibration feature.                 | None                                     |
 
-### Example: Calling a Service from an Automation
-
-You can easily create dashboard buttons and automations to trigger these calibration routines.
-
-#### 1. Create a "Calibrate CO2 Sensor" Button Helper
-
-In Home Assistant, go to **Settings > Devices & Services > Helpers** and create a new **Button** helper named `Calibrate CO2 Sensor`.
-
-#### 2. Create the Automation
-
-Go to **Settings > Automations & Scenes** and create a new automation.
-
-```yaml
-alias: "CO2 Sensor: Calibrate in Fresh Air"
-description: "Triggers the fresh air calibration service for the CO2 sensor"
-trigger:
-  - platform: state
-    # This is the button helper you created
-    entity_id: input_button.calibrate_co2_sensor
-condition: []
-action:
-  - service: esphome.co2_3_zero_fresh_air # <-- IMPORTANT: Change 'co2_3' to your device's name
-  - service: persistent_notification.create
-    data:
-      title: "CO2 Sensor"
-      message: "Fresh air calibration command sent."
-mode: single
-```
-
-Now, whenever you press the "Calibrate CO2 Sensor" button in your Home Assistant dashboard, it will call the `zero_fresh_air` service on your ESPHome device.
