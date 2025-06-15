@@ -1,4 +1,4 @@
-# Custom UART CO2 Sensor Component for ESPHome
+# CozIR®-LP CO2 Sensor Component for ESPHome
 
 This is an external component for [ESPHome](https://esphome.io/) that integrates UART-based CO2 sensors. It provides a clean way to read sensor values and expose advanced calibration and configuration functions as services in Home Assistant.
 
